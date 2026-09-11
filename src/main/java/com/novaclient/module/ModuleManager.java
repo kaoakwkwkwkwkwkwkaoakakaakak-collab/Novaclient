@@ -4,7 +4,7 @@ import com.novaclient.compat.Compatibility;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.CloudRenderMode;
-import net.minecraft.particle.ParticlesMode;
+import net.minecraft.client.option.ParticlesMode;
 
 import java.io.IOException;
 import java.io.InputStream;
