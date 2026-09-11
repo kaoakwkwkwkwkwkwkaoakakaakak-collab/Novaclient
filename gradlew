@@ -1,0 +1,5 @@
+#!/bin/sh
+APP_HOME=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
+if [ -n "$JAVA_HOME" ]; then JAVA_EXECUTABLE="$JAVA_HOME/bin/java"; else JAVA_EXECUTABLE="java"; fi
+exec "$JAVA_EXECUTABLE" -Xmx64m -Xms64m -Dorg.gradle.appname=gradlew -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"

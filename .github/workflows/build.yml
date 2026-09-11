@@ -1,0 +1,42 @@
+name: Build NovaClient
+
+on:
+  push:
+    branches: ["main", "arena/**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Set up Java 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Build remapped jar
+        run: |
+          set -o pipefail
+          ./gradlew build --stacktrace 2>&1 | tee build.log
+      - name: Surface build diagnostics
+        if: failure()
+        run: |
+          echo "--- NovaClient build diagnostics ---"
+          tail -n 120 build.log
+          message=$(tail -n 25 build.log | tr '\n' ' ' | cut -c1-6000)
+          echo "::error file=build.gradle,line=1::$message"
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: novaclient-build-log
+          path: build.log
+          if-no-files-found: ignore
